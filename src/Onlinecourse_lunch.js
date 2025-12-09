@@ -1,9 +1,35 @@
-export default function OnlineCourseLunch() {
+export default function OnlineCourseLunch({ width = 1080, height = 1080 }) {
+  const scale = Math.min(width, height) / 1080;
+  
+  const fontSize = {
+    presents: Math.round(14 * scale),
+    logo: Math.round(28 * scale),
+    pill: Math.round(14 * scale),
+    heading: Math.round(44 * scale),
+    subheading: Math.round(20 * scale),
+    bigText: Math.round(100 * scale),
+    cta: Math.round(16 * scale),
+    ctaSub: Math.round(15 * scale),
+    small: Math.round(13 * scale),
+    register: Math.round(16 * scale),
+    button: Math.round(18 * scale),
+    naira: Math.round(80 * scale),
+  };
+
+  const shapes = {
+    ring1W: Math.round(380 * scale),
+    ring1H: Math.round(240 * scale),
+    ring2W: Math.round(340 * scale),
+    ring2H: Math.round(220 * scale),
+    discW: Math.round(260 * scale),
+    discH: Math.round(180 * scale),
+  };
+
   return (
     <div 
       style={{ 
-        width: '1080px', 
-        height: '1500px',
+        width: `${width}px`, 
+        height: `${height}px`,
         fontFamily: 'Montserrat, sans-serif',
         position: 'relative',
         overflow: 'hidden'
@@ -25,11 +51,11 @@ export default function OnlineCourseLunch() {
       <div 
         style={{
           position: 'absolute',
-          width: '1400px',
-          height: '500px',
+          width: `${width * 1.3}px`,
+          height: `${height * 0.35}px`,
           background: 'linear-gradient(135deg, rgba(1, 105, 56, 0.2) 0%, rgba(0,0,0,0.3) 100%)',
           transform: 'rotate(-12deg)',
-          top: '420px',
+          top: `${height * 0.28}px`,
           left: '-100px'
         }}
       />
@@ -38,24 +64,24 @@ export default function OnlineCourseLunch() {
       <div 
         style={{
           position: 'absolute',
-          width: '500px',
-          height: '500px',
+          width: `${300 * scale}px`,
+          height: `${300 * scale}px`,
           borderRadius: '50%',
           background: 'radial-gradient(circle, rgba(94, 178, 41, 0.08) 0%, transparent 70%)',
-          top: '-150px',
-          right: '-100px',
+          top: '-8%',
+          right: '-5%',
           filter: 'blur(40px)'
         }}
       />
       <div 
         style={{
           position: 'absolute',
-          width: '400px',
-          height: '400px',
+          width: `${250 * scale}px`,
+          height: `${250 * scale}px`,
           borderRadius: '50%',
           background: 'radial-gradient(circle, rgba(242, 201, 76, 0.1) 0%, transparent 70%)',
-          bottom: '250px',
-          left: '-100px',
+          bottom: '10%',
+          left: '-5%',
           filter: 'blur(30px)'
         }}
       />
@@ -67,139 +93,143 @@ export default function OnlineCourseLunch() {
           inset: 0,
           opacity: 0.3,
           backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px)',
-          backgroundSize: '24px 24px'
+          backgroundSize: `${20 * scale}px ${20 * scale}px`
         }}
       />
 
-      {/* Content Container */}
+      {/* Content Container - Using percentage-based layout */}
       <div style={{ 
         position: 'relative', 
         zIndex: 10, 
         height: '100%', 
         display: 'flex', 
         flexDirection: 'column',
-        padding: '50px 60px'
+        padding: `${height * 0.04}px ${width * 0.05}px`
       }}>
         
-        {/* TOP: Logo + Pill */}
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          {/* Presents text */}
+        {/* TOP SECTION - 15% */}
+        <div style={{ 
+          height: '15%',
+          display: 'flex', 
+          flexDirection: 'column', 
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
           <p style={{ 
-            fontSize: '16px', 
+            fontSize: `${fontSize.presents}px`, 
             fontWeight: 600, 
             color: '#C3E2E5', 
             letterSpacing: '0.15em',
-            marginBottom: '8px',
-            textTransform: 'uppercase'
+            textTransform: 'uppercase',
+            margin: 0
           }}>
             EduBridge Academy Presents
           </p>
           
-          {/* Logo */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
-            <svg width="44" height="36" viewBox="0 0 40 32" fill="none">
+          <div style={{ display: 'flex', alignItems: 'center', gap: `${8 * scale}px`, margin: `${10 * scale}px 0` }}>
+            <svg width={32 * scale} height={26 * scale} viewBox="0 0 40 32" fill="none">
               <path d="M4 28 L20 8 L36 28" stroke="#5EB229" strokeWidth="3" strokeLinecap="round" fill="none"/>
               <path d="M10 28 L20 14 L30 28" stroke="#016938" strokeWidth="2.5" strokeLinecap="round" fill="none"/>
               <circle cx="20" cy="6" r="4" fill="#5EB229" />
             </svg>
-            <div>
-              <span style={{ fontSize: '32px', fontWeight: 800, letterSpacing: '-0.02em', color: '#FFFFFF', display: 'block' }}>
-                EliteBridge Learning
-              </span>
-            </div>
+            <span style={{ fontSize: `${fontSize.logo}px`, fontWeight: 800, letterSpacing: '-0.02em', color: '#FFFFFF' }}>
+              EliteBridge Learning
+            </span>
           </div>
           
-          {/* Pill */}
           <div 
             style={{
-              padding: '14px 32px',
-              borderRadius: '40px',
+              padding: `${8 * scale}px ${20 * scale}px`,
+              borderRadius: `${30 * scale}px`,
               backgroundColor: 'rgba(1, 105, 56, 0.4)',
-              border: '1px solid rgba(94, 178, 41, 0.3)',
-              boxShadow: 'inset 0 2px 8px rgba(0,0,0,0.2)'
+              border: '1px solid rgba(94, 178, 41, 0.3)'
             }}
           >
-            <span style={{ fontSize: '16px', fontWeight: 600, color: '#FFFFFF', letterSpacing: '0.05em' }}>
+            <span style={{ fontSize: `${fontSize.pill}px`, fontWeight: 600, color: '#FFFFFF', letterSpacing: '0.05em' }}>
               E-Learning Platform Beta
             </span>
           </div>
         </div>
 
-        {/* HEADING */}
-        <div style={{ textAlign: 'center', marginTop: '35px' }}>
+        {/* HEADING SECTION - 12% */}
+        <div style={{ 
+          height: '12%',
+          textAlign: 'center',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center'
+        }}>
           <h1 style={{ 
-            fontSize: '56px', 
+            fontSize: `${fontSize.heading}px`, 
             fontWeight: 800, 
             color: '#5EB229',
             lineHeight: 1.1,
-            letterSpacing: '0.01em',
             textShadow: '0 2px 20px rgba(94, 178, 41, 0.3)',
             margin: 0
           }}>
             Financial Instruments
           </h1>
           <p style={{ 
-            fontSize: '26px', 
+            fontSize: `${fontSize.subheading}px`, 
             fontWeight: 500, 
             color: '#FFFFFF',
-            marginTop: '10px',
+            marginTop: `${5 * scale}px`,
             opacity: 0.9
           }}>
             is the first course on our new e-learning platform
           </p>
         </div>
 
-        {/* CENTRAL 3D SHAPES */}
+        {/* SHAPES + BIG TEXT SECTION - 43% */}
         <div style={{ 
-          position: 'relative', 
-          flex: 1, 
+          height: '43%',
+          position: 'relative',
           display: 'flex', 
           alignItems: 'center', 
-          justifyContent: 'center',
-          marginTop: '20px'
+          justifyContent: 'center'
         }}>
           
-          {/* Back ring - Green */}
+          {/* Back ring */}
           <div 
             style={{
               position: 'absolute',
-              width: '520px',
-              height: '320px',
+              width: `${shapes.ring1W}px`,
+              height: `${shapes.ring1H}px`,
               borderRadius: '50%',
               background: 'linear-gradient(120deg, #5EB229 0%, #016938 100%)',
               transform: 'rotate(-15deg)',
               boxShadow: '0 25px 50px rgba(0,0,0,0.35), inset 0 5px 20px rgba(255,255,255,0.1)',
-              left: '60px',
-              top: '80px'
+              left: '8%',
+              top: '15%'
             }}
           />
           
-          {/* Middle ring - Dark Green */}
+          {/* Middle ring */}
           <div 
             style={{
               position: 'absolute',
-              width: '480px',
-              height: '300px',
+              width: `${shapes.ring2W}px`,
+              height: `${shapes.ring2H}px`,
               borderRadius: '50%',
               background: 'linear-gradient(120deg, #016938 0%, #154B54 100%)',
               transform: 'rotate(-15deg)',
               boxShadow: '0 20px 45px rgba(0,0,0,0.3), inset 0 4px 15px rgba(255,255,255,0.08)',
-              left: '100px',
-              top: '120px'
+              left: '15%',
+              top: '25%'
             }}
           />
           
-          {/* Front disc - Gold with Naira */}
+          {/* Gold disc with Naira */}
           <div 
             style={{
               position: 'absolute',
-              width: '360px',
-              height: '260px',
+              width: `${shapes.discW}px`,
+              height: `${shapes.discH}px`,
               borderRadius: '50%',
               background: 'linear-gradient(to bottom, #F2C94C 0%, #D4A832 100%)',
               boxShadow: '0 20px 50px rgba(0,0,0,0.4), inset 0 -5px 20px rgba(0,0,0,0.2)',
-              right: '100px',
-              top: '100px',
+              right: '12%',
+              top: '20%',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center'
@@ -210,17 +240,14 @@ export default function OnlineCourseLunch() {
                 position: 'absolute',
                 inset: 0,
                 borderRadius: '50%',
-                overflow: 'hidden',
                 backgroundImage: 'radial-gradient(circle, rgba(0,0,0,0.12) 1.5px, transparent 1.5px)',
                 backgroundSize: '10px 10px'
               }}
             />
             <span style={{ 
-              fontSize: '120px', 
+              fontSize: `${fontSize.naira}px`, 
               fontWeight: 900, 
               color: '#016938',
-              position: 'relative',
-              zIndex: 1,
               textShadow: '2px 2px 0 rgba(255,255,255,0.3)'
             }}>
               ₦
@@ -234,14 +261,11 @@ export default function OnlineCourseLunch() {
               textAlign: 'center',
               transform: 'rotate(-5deg)',
               zIndex: 10,
-              width: '100%',
-              top: '50%',
-              left: '0',
-              marginTop: '-70px'
+              width: '100%'
             }}
           >
             <h2 style={{ 
-              fontSize: '150px', 
+              fontSize: `${fontSize.bigText}px`, 
               fontWeight: 900, 
               color: '#FFFFFF',
               lineHeight: 0.9,
@@ -252,7 +276,7 @@ export default function OnlineCourseLunch() {
               FREE
             </h2>
             <h2 style={{ 
-              fontSize: '150px', 
+              fontSize: `${fontSize.bigText}px`, 
               fontWeight: 900, 
               color: '#FFFFFF',
               lineHeight: 0.9,
@@ -265,33 +289,39 @@ export default function OnlineCourseLunch() {
           </div>
         </div>
 
-        {/* BOTTOM CTA */}
-        <div style={{ textAlign: 'center', paddingBottom: '80px' }}>
-          <p style={{ fontSize: '22px', fontWeight: 600, color: '#FFFFFF', marginBottom: '10px' }}>
+        {/* BOTTOM CTA SECTION - 30% */}
+        <div style={{ 
+          height: '30%',
+          textAlign: 'center',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center'
+        }}>
+          <p style={{ fontSize: `${fontSize.cta}px`, fontWeight: 600, color: '#FFFFFF', margin: 0 }}>
             We're launching our e-learning platform — come help us test it for free.
           </p>
-          <p style={{ fontSize: '20px', fontWeight: 500, color: 'rgba(255,255,255,0.75)', lineHeight: 1.5 }}>
+          <p style={{ fontSize: `${fontSize.ctaSub}px`, fontWeight: 500, color: 'rgba(255,255,255,0.75)', lineHeight: 1.4, marginTop: `${6 * scale}px` }}>
             Get <span style={{ color: '#5EB229', fontWeight: 700 }}>free access</span> to the <span style={{ color: '#F2C94C', fontWeight: 700 }}>'Financial Instruments'</span> course and <span style={{ color: '#5EB229', fontWeight: 700 }}>earn a certificate</span> when you complete it.
           </p>
-          <p style={{ fontSize: '16px', fontWeight: 500, color: 'rgba(255,255,255,0.55)', marginTop: '12px' }}>
+          <p style={{ fontSize: `${fontSize.small}px`, fontWeight: 500, color: 'rgba(255,255,255,0.55)', marginTop: `${6 * scale}px` }}>
             Perfect for beginners and professionals looking to break into or grow in finance.
           </p>
           
-          {/* URL */}
-          <div style={{ marginTop: '30px' }}>
-            <span style={{ fontSize: '20px', fontWeight: 600, color: '#FFFFFF', display: 'block', marginBottom: '12px' }}>
+          {/* Register Button */}
+          <div style={{ marginTop: `${12 * scale}px` }}>
+            <span style={{ fontSize: `${fontSize.register}px`, fontWeight: 600, color: '#FFFFFF', display: 'block', marginBottom: `${8 * scale}px` }}>
               Register here:
             </span>
             <div 
               style={{
-                padding: '18px 40px',
+                padding: `${12 * scale}px ${28 * scale}px`,
                 backgroundColor: '#5EB229',
-                borderRadius: '35px',
+                borderRadius: `${30 * scale}px`,
                 display: 'inline-block',
                 boxShadow: '0 4px 15px rgba(94, 178, 41, 0.4)'
               }}
             >
-              <span style={{ fontSize: '22px', fontWeight: 700, color: '#FFFFFF' }}>
+              <span style={{ fontSize: `${fontSize.button}px`, fontWeight: 700, color: '#FFFFFF' }}>
                 bit.ly/financeinst
               </span>
             </div>
