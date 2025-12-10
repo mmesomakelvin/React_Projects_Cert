@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { toPng, toSvg } from 'html-to-image';
 import { saveAs } from 'file-saver';
-import OnlineCourseLunch from './Onlinecourse_lunch';
+import Data_School_Discount_flier from './Data_School_Discount_flier';
 
 const SIZE_OPTIONS = [
   { label: 'Instagram Square', width: 1080, height: 1080 },
@@ -19,130 +19,199 @@ const SIZE_OPTIONS = [
 export default function App() {
   const designRef = useRef(null);
   const [selectedSize, setSelectedSize] = useState(SIZE_OPTIONS[0]);
+  const [isExporting, setIsExporting] = useState(false);
 
   const exportAsPng = async () => {
     if (designRef.current) {
-      const dataUrl = await toPng(designRef.current, {
-        width: selectedSize.width,
-        height: selectedSize.height,
-        pixelRatio: 2
-      });
-      saveAs(dataUrl, `${selectedSize.label.replace(/\s+/g, '-').toLowerCase()}-${selectedSize.width}x${selectedSize.height}.png`);
+      setIsExporting(true);
+      try {
+        const dataUrl = await toPng(designRef.current, {
+          width: selectedSize.width,
+          height: selectedSize.height,
+          pixelRatio: 2,
+        });
+        saveAs(
+          dataUrl,
+          `data-school-flier-${selectedSize.label.replace(/\s+/g, '-').toLowerCase()}-${selectedSize.width}x${selectedSize.height}.png`
+        );
+      } catch (error) {
+        console.error('Export failed:', error);
+      }
+      setIsExporting(false);
     }
   };
 
   const exportAsSvg = async () => {
     if (designRef.current) {
-      const dataUrl = await toSvg(designRef.current, {
-        width: selectedSize.width,
-        height: selectedSize.height
-      });
-      saveAs(dataUrl, `${selectedSize.label.replace(/\s+/g, '-').toLowerCase()}-${selectedSize.width}x${selectedSize.height}.svg`);
+      setIsExporting(true);
+      try {
+        const dataUrl = await toSvg(designRef.current, {
+          width: selectedSize.width,
+          height: selectedSize.height,
+        });
+        saveAs(
+          dataUrl,
+          `data-school-flier-${selectedSize.label.replace(/\s+/g, '-').toLowerCase()}-${selectedSize.width}x${selectedSize.height}.svg`
+        );
+      } catch (error) {
+        console.error('Export failed:', error);
+      }
+      setIsExporting(false);
     }
   };
 
   const exportAsHtml = () => {
     if (designRef.current) {
-      const htmlContent = `
-<!DOCTYPE html>
+      const htmlContent = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EduBridge Flier - ${selectedSize.label}</title>
+  <title>EduBridge Data School Flier - ${selectedSize.label}</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { display: flex; justify-content: center; align-items: center; min-height: 100vh; background: #111; }
+    body { 
+      display: flex; 
+      justify-content: center; 
+      align-items: center; 
+      min-height: 100vh; 
+      background: #111; 
+    }
   </style>
 </head>
 <body>
   ${designRef.current.innerHTML}
 </body>
 </html>`;
-      
       const blob = new Blob([htmlContent], { type: 'text/html' });
-      saveAs(blob, `${selectedSize.label.replace(/\s+/g, '-').toLowerCase()}-${selectedSize.width}x${selectedSize.height}.html`);
+      saveAs(
+        blob,
+        `data-school-flier-${selectedSize.label.replace(/\s+/g, '-').toLowerCase()}-${selectedSize.width}x${selectedSize.height}.html`
+      );
     }
   };
 
+  // Calculate preview scale to fit in viewport
   const maxPreviewHeight = 600;
-  const previewScale = Math.min(1, maxPreviewHeight / selectedSize.height, 900 / selectedSize.width);
+  const maxPreviewWidth = 900;
+  const previewScale = Math.min(
+    1,
+    maxPreviewHeight / selectedSize.height,
+    maxPreviewWidth / selectedSize.width
+  );
 
   return (
     <div style={{ background: '#111', minHeight: '100vh', padding: '20px' }}>
-      
+      {/* Header */}
+      <div
+        style={{
+          textAlign: 'center',
+          marginBottom: '24px',
+          color: '#fff',
+        }}
+      >
+        <h1
+          style={{
+            fontSize: '24px',
+            fontWeight: '700',
+            color: '#5EB229',
+            marginBottom: '8px',
+            fontFamily: 'Montserrat, sans-serif',
+          }}
+        >
+          EduBridge Academy
+        </h1>
+        <p style={{ color: '#888', fontSize: '14px' }}>Data School Discount Flier Designer</p>
+      </div>
+
       {/* Controls */}
-      <div style={{ marginBottom: '20px', display: 'flex', gap: '15px', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap' }}>
-        
-        {/* Dropdown */}
+      <div
+        style={{
+          marginBottom: '20px',
+          display: 'flex',
+          gap: '15px',
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+        }}
+      >
+        {/* Size Dropdown */}
         <select
-          value={SIZE_OPTIONS.findIndex(s => s.label === selectedSize.label)}
+          value={SIZE_OPTIONS.findIndex((s) => s.label === selectedSize.label)}
           onChange={(e) => setSelectedSize(SIZE_OPTIONS[e.target.value])}
           style={{
             padding: '12px 20px',
             fontSize: '16px',
             borderRadius: '8px',
             border: 'none',
-            backgroundColor: '#333',
+            backgroundColor: '#154B54',
             color: 'white',
             cursor: 'pointer',
-            minWidth: '220px'
+            minWidth: '240px',
+            fontFamily: 'Montserrat, sans-serif',
           }}
         >
           {SIZE_OPTIONS.map((size, index) => (
             <option key={index} value={index}>
-              {size.label} ({size.width}x{size.height})
+              {size.label} ({size.width}×{size.height})
             </option>
           ))}
         </select>
 
         {/* Export PNG Button */}
-        <button 
+        <button
           onClick={exportAsPng}
+          disabled={isExporting}
           style={{
             padding: '12px 24px',
             background: '#5EB229',
             color: 'white',
             border: 'none',
             borderRadius: '8px',
-            cursor: 'pointer',
+            cursor: isExporting ? 'wait' : 'pointer',
             fontWeight: 'bold',
-            fontSize: '16px'
+            fontSize: '16px',
+            fontFamily: 'Montserrat, sans-serif',
+            opacity: isExporting ? 0.7 : 1,
           }}
         >
-          Export as PNG
+          {isExporting ? 'Exporting...' : 'Export as PNG'}
         </button>
 
         {/* Export SVG Button */}
-        <button 
+        <button
           onClick={exportAsSvg}
+          disabled={isExporting}
           style={{
             padding: '12px 24px',
             background: '#F2C94C',
             color: '#154B54',
             border: 'none',
             borderRadius: '8px',
-            cursor: 'pointer',
+            cursor: isExporting ? 'wait' : 'pointer',
             fontWeight: 'bold',
-            fontSize: '16px'
+            fontSize: '16px',
+            fontFamily: 'Montserrat, sans-serif',
+            opacity: isExporting ? 0.7 : 1,
           }}
         >
           Export as SVG
         </button>
 
         {/* Export HTML Button */}
-        <button 
+        <button
           onClick={exportAsHtml}
           style={{
             padding: '12px 24px',
-            background: '#E44D26',
+            background: '#016938',
             color: 'white',
             border: 'none',
             borderRadius: '8px',
             cursor: 'pointer',
             fontWeight: 'bold',
-            fontSize: '16px'
+            fontSize: '16px',
+            fontFamily: 'Montserrat, sans-serif',
           }}
         >
           Export as HTML
@@ -151,19 +220,45 @@ export default function App() {
 
       {/* Size Info */}
       <div style={{ textAlign: 'center', marginBottom: '20px', color: '#888' }}>
-        Current size: {selectedSize.width} x {selectedSize.height} px
+        Current size: <span style={{ color: '#F2C94C', fontWeight: '600' }}>{selectedSize.width} × {selectedSize.height}</span> px
       </div>
 
       {/* Design Preview */}
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center',
-        transform: `scale(${previewScale})`,
-        transformOrigin: 'top center'
-      }}>
-        <div ref={designRef}>
-          <OnlineCourseLunch width={selectedSize.width} height={selectedSize.height} />
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          transform: `scale(${previewScale})`,
+          transformOrigin: 'top center',
+        }}
+      >
+        <div
+          ref={designRef}
+          style={{
+            boxShadow: '0 20px 60px rgba(0,0,0,0.5)',
+            borderRadius: '8px',
+            overflow: 'hidden',
+          }}
+        >
+          <Data_School_Discount_flier
+            width={selectedSize.width}
+            height={selectedSize.height}
+          />
         </div>
+      </div>
+
+      {/* Footer */}
+      <div
+        style={{
+          textAlign: 'center',
+          marginTop: `${Math.max(40, selectedSize.height * previewScale + 40)}px`,
+          paddingTop: '20px',
+          borderTop: '1px solid #333',
+          color: '#666',
+          fontSize: '12px',
+        }}
+      >
+        <p>Brand Colors: Teal #154B54 • Green #5EB229 • Dark Green #016938 • Gold #F2C94C</p>
       </div>
     </div>
   );
