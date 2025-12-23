@@ -4,55 +4,65 @@ import { saveAs } from "file-saver";
 import Ment_Judge_cert from "./Ment_Judge_cert";
 
 const SIZE_OPTIONS = [
-  // Print-ready (300 DPI)
-  { label: "Certificate - A4 Landscape (300dpi)", width: 3508, height: 2480 },
-  { label: "Certificate - US Letter Landscape (300dpi)", width: 3300, height: 2550 },
-
-  // Digital / screen
-  { label: "Certificate - HD (1920×1080)", width: 1920, height: 1080 },
-  { label: "Certificate - Web (1600×1000)", width: 1600, height: 1000 },
-  { label: "Certificate - Small Preview (1100×700)", width: 1100, height: 700 },
+  { label: 'Instagram Square', width: 1080, height: 1080 },
+  { label: 'Instagram Portrait', width: 1080, height: 1350 },
+  { label: 'Instagram Story / Reel', width: 1080, height: 1920 },
+  { label: 'Facebook Post', width: 1200, height: 630 },
+  { label: 'Facebook Story', width: 1080, height: 1920 },
+  { label: 'Twitter / X Post', width: 1600, height: 900 },
+  { label: 'LinkedIn Post', width: 1200, height: 627 },
+  { label: 'Pinterest Pin', width: 1000, height: 1500 },
+  { label: 'YouTube Thumbnail', width: 1280, height: 720 },
+  { label: 'WhatsApp Status', width: 1080, height: 1920 },
 ];
 
 export default function App() {
   const designRef = useRef(null);
-  const [selectedSize, setSelectedSize] = useState(SIZE_OPTIONS[0]);
+  const DesignComponent = Data_School_Discount_flier;
+  const designComponentName =
+    DesignComponent.displayName || DesignComponent.name || 'design';
+  const isCertificate = designComponentName.toLowerCase().endsWith('_cert');
+  const sizeOptions = isCertificate ? CERTIFICATE_SIZE_OPTIONS : FLIER_SIZE_OPTIONS;
+  const [selectedSize, setSelectedSize] = useState(sizeOptions[0]);
   const [isExporting, setIsExporting] = useState(false);
 
-  const safeLabel = selectedSize.label.replace(/[^\w]+/g, "-").toLowerCase();
-  const fileBase = `ment-judge-cert-${safeLabel}-${selectedSize.width}x${selectedSize.height}`;
-
   const exportAsPng = async () => {
-    if (!designRef.current) return;
-    setIsExporting(true);
-    try {
-      const dataUrl = await toPng(designRef.current, {
-        width: selectedSize.width,
-        height: selectedSize.height,
-        pixelRatio: 2,
-        cacheBust: true,
-      });
-      saveAs(dataUrl, `${fileBase}.png`);
-    } catch (error) {
-      console.error("Export PNG failed:", error);
+    if (designRef.current) {
+      setIsExporting(true);
+      try {
+        const dataUrl = await toPng(designRef.current, {
+          width: selectedSize.width,
+          height: selectedSize.height,
+          pixelRatio: 2,
+        });
+        saveAs(
+          dataUrl,
+          `data-school-flier-${selectedSize.label.replace(/\s+/g, '-').toLowerCase()}-${selectedSize.width}x${selectedSize.height}.png`
+        );
+      } catch (error) {
+        console.error('Export failed:', error);
+      }
+      setIsExporting(false);
     }
-    setIsExporting(false);
   };
 
   const exportAsSvg = async () => {
-    if (!designRef.current) return;
-    setIsExporting(true);
-    try {
-      const dataUrl = await toSvg(designRef.current, {
-        width: selectedSize.width,
-        height: selectedSize.height,
-        cacheBust: true,
-      });
-      saveAs(dataUrl, `${fileBase}.svg`);
-    } catch (error) {
-      console.error("Export SVG failed:", error);
+    if (designRef.current) {
+      setIsExporting(true);
+      try {
+        const dataUrl = await toSvg(designRef.current, {
+          width: selectedSize.width,
+          height: selectedSize.height,
+        });
+        saveAs(
+          dataUrl,
+          `data-school-flier-${selectedSize.label.replace(/\s+/g, '-').toLowerCase()}-${selectedSize.width}x${selectedSize.height}.svg`
+        );
+      } catch (error) {
+        console.error('Export failed:', error);
+      }
+      setIsExporting(false);
     }
-    setIsExporting(false);
   };
 
   const exportAsHtml = () => {
@@ -61,9 +71,9 @@ export default function App() {
     const htmlContent = `<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EduBridge Certificate - ${selectedSize.label}</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduBridge Data School Flier - ${selectedSize.label}</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -81,9 +91,12 @@ export default function App() {
   ${designRef.current.innerHTML}
 </body>
 </html>`;
-
-    const blob = new Blob([htmlContent], { type: "text/html" });
-    saveAs(blob, `${fileBase}.html`);
+      const blob = new Blob([htmlContent], { type: 'text/html' });
+      saveAs(
+        blob,
+        `data-school-flier-${selectedSize.label.replace(/\s+/g, '-').toLowerCase()}-${selectedSize.width}x${selectedSize.height}.html`
+      );
+    }
   };
 
   // Preview scaling
@@ -110,9 +123,7 @@ export default function App() {
         >
           EduBridge Academy
         </h1>
-        <p style={{ color: "#888", fontSize: "14px", fontFamily: "Montserrat, sans-serif" }}>
-          Mentor / Judge Certificate Designer
-        </p>
+        <p style={{ color: '#888', fontSize: '14px' }}>Data School Discount Flier Designer</p>
       </div>
 
       {/* Controls */}
@@ -128,7 +139,7 @@ export default function App() {
       >
         <select
           value={SIZE_OPTIONS.findIndex((s) => s.label === selectedSize.label)}
-          onChange={(e) => setSelectedSize(SIZE_OPTIONS[Number(e.target.value)])}
+          onChange={(e) => setSelectedSize(SIZE_OPTIONS[e.target.value])}
           style={{
             padding: "12px 20px",
             fontSize: "16px",
@@ -141,7 +152,7 @@ export default function App() {
             fontFamily: "Montserrat, sans-serif",
           }}
         >
-          {SIZE_OPTIONS.map((size, index) => (
+          {sizeOptions.map((size, index) => (
             <option key={index} value={index}>
               {size.label} ({size.width}×{size.height})
             </option>
@@ -230,7 +241,7 @@ export default function App() {
             overflow: "hidden",
           }}
         >
-          <Ment_Judge_cert
+          <Data_School_Discount_flier
             width={selectedSize.width}
             height={selectedSize.height}
             // You can override content here anytime:
