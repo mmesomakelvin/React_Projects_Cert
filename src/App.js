@@ -3,7 +3,7 @@ import { toPng, toSvg } from 'html-to-image';
 import { saveAs } from 'file-saver';
 import Data_School_Discount_flier from './Data_School_Discount_flier';
 
-const SIZE_OPTIONS = [
+const FLIER_SIZE_OPTIONS = [
   { label: 'Instagram Square', width: 1080, height: 1080 },
   { label: 'Instagram Portrait', width: 1080, height: 1350 },
   { label: 'Instagram Story / Reel', width: 1080, height: 1920 },
@@ -14,12 +14,41 @@ const SIZE_OPTIONS = [
   { label: 'Pinterest Pin', width: 1000, height: 1500 },
   { label: 'YouTube Thumbnail', width: 1280, height: 720 },
   { label: 'WhatsApp Status', width: 1080, height: 1920 },
+  { label: 'US Letter Flier (Portrait)', width: 2550, height: 3300 },
+  { label: 'US Letter Flier (Landscape)', width: 3300, height: 2550 },
+  { label: 'A4 Flier (Portrait)', width: 2480, height: 3508 },
+  { label: 'A4 Flier (Landscape)', width: 3508, height: 2480 },
+];
+
+const CERTIFICATE_SIZE_OPTIONS = [
+  { label: 'A4 Certificate (Landscape)', width: 3508, height: 2480 },
+  { label: 'A4 Certificate (Portrait)', width: 2480, height: 3508 },
+  { label: 'US Letter Certificate (Landscape)', width: 3300, height: 2550 },
+  { label: 'US Letter Certificate (Portrait)', width: 2550, height: 3300 },
+  { label: 'A3 Certificate (Landscape)', width: 4961, height: 3508 },
+  { label: 'A3 Certificate (Portrait)', width: 3508, height: 4961 },
+  { label: 'Tabloid Certificate (17x11 in)', width: 5100, height: 3300 },
+  { label: 'Legal Certificate (Landscape)', width: 4200, height: 2550 },
+  { label: 'Legal Certificate (Portrait)', width: 2550, height: 4200 },
+  { label: 'Screen HD Certificate (16:9)', width: 1920, height: 1080 },
+  { label: 'Screen Widescreen Certificate (3:2)', width: 1800, height: 1200 },
 ];
 
 export default function App() {
   const designRef = useRef(null);
-  const [selectedSize, setSelectedSize] = useState(SIZE_OPTIONS[0]);
+  const DesignComponent = Data_School_Discount_flier;
+  const designComponentName =
+    DesignComponent.displayName || DesignComponent.name || 'design';
+  const isCertificate = designComponentName.toLowerCase().endsWith('_cert');
+  const sizeOptions = isCertificate ? CERTIFICATE_SIZE_OPTIONS : FLIER_SIZE_OPTIONS;
+  const [selectedSize, setSelectedSize] = useState(sizeOptions[0]);
   const [isExporting, setIsExporting] = useState(false);
+  const designSlug = isCertificate ? 'certificate' : 'flier';
+  const fileNameBase = `${designSlug}-${designComponentName.replace(/_/g, '-').toLowerCase()}`;
+
+  React.useEffect(() => {
+    setSelectedSize(sizeOptions[0]);
+  }, [sizeOptions]);
 
   const exportAsPng = async () => {
     if (designRef.current) {
@@ -32,7 +61,9 @@ export default function App() {
         });
         saveAs(
           dataUrl,
-          `data-school-flier-${selectedSize.label.replace(/\s+/g, '-').toLowerCase()}-${selectedSize.width}x${selectedSize.height}.png`
+          `${fileNameBase}-${selectedSize.label
+            .replace(/\s+/g, '-')
+            .toLowerCase()}-${selectedSize.width}x${selectedSize.height}.png`
         );
       } catch (error) {
         console.error('Export failed:', error);
@@ -51,7 +82,9 @@ export default function App() {
         });
         saveAs(
           dataUrl,
-          `data-school-flier-${selectedSize.label.replace(/\s+/g, '-').toLowerCase()}-${selectedSize.width}x${selectedSize.height}.svg`
+          `${fileNameBase}-${selectedSize.label
+            .replace(/\s+/g, '-')
+            .toLowerCase()}-${selectedSize.width}x${selectedSize.height}.svg`
         );
       } catch (error) {
         console.error('Export failed:', error);
@@ -67,7 +100,7 @@ export default function App() {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EduBridge Data School Flier - ${selectedSize.label}</title>
+  <title>EduBridge Designer - ${selectedSize.label}</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -87,7 +120,9 @@ export default function App() {
       const blob = new Blob([htmlContent], { type: 'text/html' });
       saveAs(
         blob,
-        `data-school-flier-${selectedSize.label.replace(/\s+/g, '-').toLowerCase()}-${selectedSize.width}x${selectedSize.height}.html`
+        `${fileNameBase}-${selectedSize.label
+          .replace(/\s+/g, '-')
+          .toLowerCase()}-${selectedSize.width}x${selectedSize.height}.html`
       );
     }
   };
@@ -122,7 +157,13 @@ export default function App() {
         >
           EduBridge Academy
         </h1>
-        <p style={{ color: '#888', fontSize: '14px' }}>Data School Discount Flier Designer</p>
+        <p style={{ color: '#888', fontSize: '14px' }}>
+          {isCertificate ? 'Certificate Designer & Exporter' : 'Flier Designer & Exporter'}
+        </p>
+        <p style={{ color: '#aaa', fontSize: '12px', marginTop: '4px' }}>
+          Detected design: <strong style={{ color: '#F2C94C' }}>{designComponentName}</strong>{' '}
+          ({isCertificate ? 'certificate' : 'flier'} mode)
+        </p>
       </div>
 
       {/* Controls */}
@@ -138,8 +179,8 @@ export default function App() {
       >
         {/* Size Dropdown */}
         <select
-          value={SIZE_OPTIONS.findIndex((s) => s.label === selectedSize.label)}
-          onChange={(e) => setSelectedSize(SIZE_OPTIONS[e.target.value])}
+          value={sizeOptions.findIndex((s) => s.label === selectedSize.label)}
+          onChange={(e) => setSelectedSize(sizeOptions[e.target.value])}
           style={{
             padding: '12px 20px',
             fontSize: '16px',
@@ -152,7 +193,7 @@ export default function App() {
             fontFamily: 'Montserrat, sans-serif',
           }}
         >
-          {SIZE_OPTIONS.map((size, index) => (
+          {sizeOptions.map((size, index) => (
             <option key={index} value={index}>
               {size.label} ({size.width}×{size.height})
             </option>
@@ -240,7 +281,7 @@ export default function App() {
             overflow: 'hidden',
           }}
         >
-          <Data_School_Discount_flier
+          <DesignComponent
             width={selectedSize.width}
             height={selectedSize.height}
           />
