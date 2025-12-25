@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { toPng, toSvg } from "html-to-image";
 import { saveAs } from "file-saver";
-import DataSchoolDiscountFlier from "./DataSchoolDiscountFlier";
+import OnlineCourseLunch from "./OnlineCourseLunch";
 
 const SIZE_OPTIONS = [
   { label: "Instagram Square", width: 1080, height: 1080 },
@@ -32,7 +32,7 @@ export default function App() {
         });
         saveAs(
           dataUrl,
-          `onlinecourse-launch-${selectedSize.label
+          `cowrywise-scholarship-${selectedSize.label
             .replace(/\s+/g, "-")
             .toLowerCase()}-${selectedSize.width}x${selectedSize.height}.png`
         );
@@ -53,7 +53,7 @@ export default function App() {
         });
         saveAs(
           dataUrl,
-          `onlinecourse-launch-${selectedSize.label
+          `cowrywise-scholarship-${selectedSize.label
             .replace(/\s+/g, "-")
             .toLowerCase()}-${selectedSize.width}x${selectedSize.height}.svg`
         );
@@ -72,7 +72,7 @@ export default function App() {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EliteBridge Learning Flier - ${selectedSize.label}</title>
+  <title>Cowrywise Ambassadors Scholarship - ${selectedSize.label}</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -93,7 +93,7 @@ export default function App() {
     const blob = new Blob([htmlContent], { type: "text/html" });
     saveAs(
       blob,
-      `onlinecourse-launch-${selectedSize.label
+      `cowrywise-scholarship-${selectedSize.label
         .replace(/\s+/g, "-")
         .toLowerCase()}-${selectedSize.width}x${selectedSize.height}.html`
     );
@@ -116,15 +116,15 @@ export default function App() {
           style={{
             fontSize: "24px",
             fontWeight: 800,
-            color: "#5EB229",
+            color: "#2d7a54",
             marginBottom: "8px",
             fontFamily: "Montserrat, sans-serif",
           }}
         >
-          EliteBridge Learning
+          Cowrywise Ambassadors
         </h1>
         <p style={{ color: "#888", fontSize: "14px" }}>
-          Online Course Launch Flier Designer
+          Scholarship Program Flier Designer
         </p>
       </div>
 
@@ -250,7 +250,7 @@ export default function App() {
             overflow: "hidden",
           }}
         >
-          <DataSchoolDiscountFlier
+          <OnlineCourseLunch
             width={selectedSize.width}
             height={selectedSize.height}
           />
@@ -270,7 +270,7 @@ export default function App() {
         }}
       >
         <p>
-          Brand Colors: Teal #154B54 • Green #5EB229 • Dark Green #016938 • Gold #F2C94C • Deep Blue #040084
+          Brand Colors: Dark Green #164a34 • Forest Green #0f3323 • Teal #2d7a54 • Mustard #E8A63E • Orange #E87C3E • Cream #FFF8E7
         </p>
       </div>
     </div>
