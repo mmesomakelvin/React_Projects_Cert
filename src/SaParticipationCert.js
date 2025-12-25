@@ -1,4 +1,4 @@
-export default function SA_Participation_Cert({
+export default function SaParticipationCert({
   width = 768,
   height = 515,
 }) {

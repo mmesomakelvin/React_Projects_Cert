@@ -1,4 +1,4 @@
-export default function Data_School_Discount_flier({ width = 1080, height = 1080 }) {
+export default function DataSchoolDiscountFlier({ width = 1080, height = 1080 }) {
   const scale = Math.min(width, height) / 1080;
 
   // EduBridge Brand Colors

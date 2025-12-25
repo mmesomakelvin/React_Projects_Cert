@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { toPng, toSvg } from "html-to-image";
 import { saveAs } from "file-saver";
-import OnlineCourseLunch from "./Onlinecourse_lunch";
+import DataSchoolDiscountFlier from "./DataSchoolDiscountFlier";
 
 const SIZE_OPTIONS = [
   { label: "Instagram Square", width: 1080, height: 1080 },
@@ -15,98 +15,6 @@ const SIZE_OPTIONS = [
   { label: "YouTube Thumbnail", width: 1280, height: 720 },
   { label: "WhatsApp Status", width: 1080, height: 1920 },
 ];
-
-function OnlineCourseLaunchFrame({ width, height }) {
-  const scale = Math.min(width / 1080, height / 1350);
-  const stripeFont = Math.round(26 * scale);
-  const logoSize = Math.round(64 * scale);
-  const borderRadius = Math.round(36 * scale);
-  const stripes = Array.from({ length: 8 });
-
-  return (
-    <div
-      style={{
-        width: `${width}px`,
-        height: `${height}px`,
-        position: "relative",
-        overflow: "hidden",
-        borderRadius: `${borderRadius}px`,
-        background: "#154B54",
-        fontFamily: "Montserrat, sans-serif",
-      }}
-    >
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          background: "#154B54",
-        }}
-      />
-
-      <div style={{ position: "absolute", inset: 0, overflow: "hidden" }}>
-        {stripes.map((_, index) => (
-          <div
-            key={`stripe-${index}`}
-            style={{
-              position: "absolute",
-              top: `${index * 15 - 10}%`,
-              left: "-10%",
-              width: "120%",
-              whiteSpace: "nowrap",
-              fontSize: `${stripeFont}px`,
-              color: "#1A6B75",
-              opacity: 0.4,
-              transform: "rotate(-12deg)",
-              letterSpacing: "0.08em",
-              textTransform: "uppercase",
-            }}
-          >
-            <span style={{ margin: `0 ${24 * scale}px` }}>
-              ★ COMING SOON
-            </span>
-            <span style={{ margin: `0 ${24 * scale}px` }}>
-              ★ COMING SOON
-            </span>
-            <span style={{ margin: `0 ${24 * scale}px` }}>
-              ★ COMING SOON
-            </span>
-            <span style={{ margin: `0 ${24 * scale}px` }}>
-              ★ COMING SOON
-            </span>
-          </div>
-        ))}
-      </div>
-
-      <div
-        style={{
-          position: "absolute",
-          top: `${32 * scale}px`,
-          right: `${32 * scale}px`,
-          width: `${logoSize}px`,
-          height: `${logoSize}px`,
-          borderRadius: "50%",
-          background: "rgba(255, 255, 255, 0.08)",
-          border: "2px solid rgba(255, 255, 255, 0.3)",
-          backdropFilter: "blur(6px)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <div
-          style={{
-            width: `${Math.round(logoSize * 0.62)}px`,
-            height: `${Math.round(logoSize * 0.62)}px`,
-            borderRadius: "50%",
-            border: "4px solid rgba(255, 255, 255, 0.75)",
-          }}
-        />
-      </div>
-
-      <OnlineCourseLunch width={width} height={height} />
-    </div>
-  );
-}
 
 export default function App() {
   const designRef = useRef(null);
@@ -342,7 +250,7 @@ export default function App() {
             overflow: "hidden",
           }}
         >
-          <Data_School_Discount_flier
+          <DataSchoolDiscountFlier
             width={selectedSize.width}
             height={selectedSize.height}
           />

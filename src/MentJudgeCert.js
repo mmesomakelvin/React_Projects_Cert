@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Ment_Judge_cert({
+export default function MentJudgeCert({
   width = 1100,
   height = 700,
 
