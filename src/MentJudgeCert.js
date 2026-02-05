@@ -9,7 +9,7 @@ export default function MentJudgeCert({
   recipient = "FULL NAME",
   citation =
     "This certificate is proudly presented in recognition of outstanding mentorship, guidance, and contribution to learner growth.",
-  program = "EduBridge Academy • Mentorship Program",
+  program = "EduBridge Academy - Mentorship Program",
   dateLabel = "DATE",
   dateValue = "12 Dec 2025",
   certId = "CERT ID: EBA-MENT-2025-0001",
@@ -62,6 +62,7 @@ export default function MentJudgeCert({
     sigName: Math.round(13 * scale),
     sigTitle: Math.round(11 * scale),
     id: Math.round(12 * scale),
+    value: Math.round(15 * scale),
   };
 
   const padX = Math.round(74 * scale);
@@ -149,7 +150,7 @@ export default function MentJudgeCert({
         }}
       />
 
-      {/* Accent ribbon with “cut” */}
+      {/* Accent ribbon with cut */}
       <div
         style={{
           position: "absolute",
@@ -191,7 +192,7 @@ export default function MentJudgeCert({
         />
       </div>
 
-      {/* ===================== TOP RIGHT “ROLE” CHIP ===================== */}
+      {/* ===================== TOP RIGHT "ROLE" CHIP ===================== */}
       <div
         style={{
           position: "absolute",
@@ -309,7 +310,7 @@ export default function MentJudgeCert({
 
         {/* micro text ring */}
         <text x="120" y="178" textAnchor="middle" fontSize="10" fontWeight="900" fill={rgba(brand.ink, 0.7)}>
-          EDUBRIDGE • ACADEMY • EXCELLENCE
+          EDUBRIDGE - ACADEMY - EXCELLENCE
         </text>
       </svg>
 

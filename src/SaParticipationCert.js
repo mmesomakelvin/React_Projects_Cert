@@ -95,7 +95,7 @@ export default function SaParticipationCert({
             boxShadow: `0 ${1 * scale}px ${4 * scale}px rgba(0,0,0,0.05)`,
           }}
         >
-          {/* Subtle wave pattern like Duke – toned down */}
+      {/* Subtle wave pattern like Duke - toned down */}
           <svg
             style={{
               position: "absolute",
@@ -129,7 +129,7 @@ export default function SaParticipationCert({
             <rect width="100%" height="100%" fill="url(#wavePatternDuke)" />
           </svg>
 
-          {/* RIGHT PANEL – vertical band with VERIFIED stamp + ID */}
+          {/* RIGHT PANEL - vertical band with VERIFIED stamp + ID */}
           <div
             style={{
               position: "absolute",
@@ -289,7 +289,7 @@ export default function SaParticipationCert({
                 </div>
               </div>
 
-              {/* Certificate ID – bold, like a digital label */}
+              {/* Certificate ID - bold, like a digital label */}
               <div
                 style={{
                   padding: `${6 * scale}px ${18 * scale}px`,

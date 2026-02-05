@@ -1,67 +1,91 @@
-import React, { useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { toPng, toSvg } from "html-to-image";
 import { saveAs } from "file-saver";
-import OnlineCourseLunch from "./OnlineCourseLunch";
+import MentJudgeCert from "./MentJudgeCert";
+import SaParticipationCert from "./SaParticipationCert";
+import "./App.css";
 
-const SIZE_OPTIONS = [
-  { label: "Instagram Square", width: 1080, height: 1080 },
-  { label: "Instagram Portrait", width: 1080, height: 1350 },
-  { label: "Instagram Story / Reel", width: 1080, height: 1920 },
-  { label: "Facebook Post", width: 1200, height: 630 },
-  { label: "Facebook Story", width: 1080, height: 1920 },
-  { label: "Twitter / X Post", width: 1600, height: 900 },
-  { label: "LinkedIn Post", width: 1200, height: 627 },
-  { label: "Pinterest Pin", width: 1000, height: 1500 },
-  { label: "YouTube Thumbnail", width: 1280, height: 720 },
-  { label: "WhatsApp Status", width: 1080, height: 1920 },
+const CERTIFICATE_TEMPLATES = [
+  {
+    id: "mentor-judge",
+    name: "Mentor and Judge Appreciation",
+    component: MentJudgeCert,
+  },
+  {
+    id: "participation",
+    name: "Participation Certificate",
+    component: SaParticipationCert,
+  },
 ];
+
+const CERTIFICATE_SIZES = [
+  { id: "a4-landscape", name: "A4 Landscape", width: 3508, height: 2480 },
+  {
+    id: "letter-landscape",
+    name: "US Letter Landscape",
+    width: 3300,
+    height: 2550,
+  },
+  { id: "a4-portrait", name: "A4 Portrait", width: 2480, height: 3508 },
+  {
+    id: "letter-portrait",
+    name: "US Letter Portrait",
+    width: 2550,
+    height: 3300,
+  },
+];
+
+const formatSizeLabel = (size) =>
+  `${size.name} (${size.width} x ${size.height})`;
 
 export default function App() {
   const designRef = useRef(null);
-  const [selectedSize, setSelectedSize] = useState(SIZE_OPTIONS[0]);
+  const [templateId, setTemplateId] = useState(CERTIFICATE_TEMPLATES[0].id);
+  const [sizeId, setSizeId] = useState(CERTIFICATE_SIZES[0].id);
   const [isExporting, setIsExporting] = useState(false);
 
+  const selectedTemplate =
+    useMemo(
+      () => CERTIFICATE_TEMPLATES.find((t) => t.id === templateId),
+      [templateId]
+    ) || CERTIFICATE_TEMPLATES[0];
+  const selectedSize =
+    useMemo(() => CERTIFICATE_SIZES.find((s) => s.id === sizeId), [sizeId]) ||
+    CERTIFICATE_SIZES[0];
+
+  const TemplateComponent = selectedTemplate.component;
+  const exportBaseName = `certificate-${selectedTemplate.id}-${selectedSize.id}-${selectedSize.width}x${selectedSize.height}`;
+
   const exportAsPng = async () => {
-    if (designRef.current) {
-      setIsExporting(true);
-      try {
-        const dataUrl = await toPng(designRef.current, {
-          width: selectedSize.width,
-          height: selectedSize.height,
-          pixelRatio: 2,
-        });
-        saveAs(
-          dataUrl,
-          `cowrywise-scholarship-${selectedSize.label
-            .replace(/\s+/g, "-")
-            .toLowerCase()}-${selectedSize.width}x${selectedSize.height}.png`
-        );
-      } catch (error) {
-        console.error("Export failed:", error);
-      }
-      setIsExporting(false);
+    if (!designRef.current) return;
+    setIsExporting(true);
+    try {
+      const dataUrl = await toPng(designRef.current, {
+        width: selectedSize.width,
+        height: selectedSize.height,
+        pixelRatio: 1,
+        cacheBust: true,
+      });
+      saveAs(dataUrl, `${exportBaseName}.png`);
+    } catch (error) {
+      console.error("Export failed:", error);
     }
+    setIsExporting(false);
   };
 
   const exportAsSvg = async () => {
-    if (designRef.current) {
-      setIsExporting(true);
-      try {
-        const dataUrl = await toSvg(designRef.current, {
-          width: selectedSize.width,
-          height: selectedSize.height,
-        });
-        saveAs(
-          dataUrl,
-          `cowrywise-scholarship-${selectedSize.label
-            .replace(/\s+/g, "-")
-            .toLowerCase()}-${selectedSize.width}x${selectedSize.height}.svg`
-        );
-      } catch (error) {
-        console.error("Export failed:", error);
-      }
-      setIsExporting(false);
+    if (!designRef.current) return;
+    setIsExporting(true);
+    try {
+      const dataUrl = await toSvg(designRef.current, {
+        width: selectedSize.width,
+        height: selectedSize.height,
+      });
+      saveAs(dataUrl, `${exportBaseName}.svg`);
+    } catch (error) {
+      console.error("Export failed:", error);
     }
+    setIsExporting(false);
   };
 
   const exportAsHtml = () => {
@@ -69,209 +93,158 @@ export default function App() {
 
     const htmlContent = `<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cowrywise Ambassadors Scholarship - ${selectedSize.label}</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      background: #111;
-      padding: 24px;
-    }
-  </style>
-</head>
-<body>
-  ${designRef.current.innerHTML}
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Certificate - ${selectedTemplate.name}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <style>
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f3f1ea;
+        padding: 32px;
+      }
+    </style>
+  </head>
+  <body>
+    ${designRef.current.innerHTML}
+  </body>
 </html>`;
     const blob = new Blob([htmlContent], { type: "text/html" });
-    saveAs(
-      blob,
-      `cowrywise-scholarship-${selectedSize.label
-        .replace(/\s+/g, "-")
-        .toLowerCase()}-${selectedSize.width}x${selectedSize.height}.html`
-    );
+    saveAs(blob, `${exportBaseName}.html`);
   };
 
-  // Preview scaling
-  const maxPreviewHeight = 600;
-  const maxPreviewWidth = 950;
+  const maxPreviewWidth = 900;
+  const maxPreviewHeight = 560;
   const previewScale = Math.min(
     1,
-    maxPreviewHeight / selectedSize.height,
-    maxPreviewWidth / selectedSize.width
+    maxPreviewWidth / selectedSize.width,
+    maxPreviewHeight / selectedSize.height
   );
 
   return (
-    <div style={{ background: "#111", minHeight: "100vh", padding: "20px" }}>
-      {/* Header */}
-      <div style={{ textAlign: "center", marginBottom: "24px", color: "#fff" }}>
-        <h1
-          style={{
-            fontSize: "24px",
-            fontWeight: 800,
-            color: "#2d7a54",
-            marginBottom: "8px",
-            fontFamily: "Montserrat, sans-serif",
-          }}
-        >
-          Cowrywise Ambassadors
-        </h1>
-        <p style={{ color: "#888", fontSize: "14px" }}>
-          Scholarship Program Flier Designer
-        </p>
-      </div>
-
-      {/* Controls */}
-      <div
-        style={{
-          marginBottom: "20px",
-          display: "flex",
-          gap: "15px",
-          justifyContent: "center",
-          alignItems: "center",
-          flexWrap: "wrap",
-        }}
-      >
-        <select
-          value={SIZE_OPTIONS.findIndex((s) => s.label === selectedSize.label)}
-          onChange={(e) => setSelectedSize(SIZE_OPTIONS[e.target.value])}
-          style={{
-            padding: "12px 20px",
-            fontSize: "16px",
-            borderRadius: "8px",
-            border: "none",
-            backgroundColor: "#154B54",
-            color: "white",
-            cursor: "pointer",
-            minWidth: "280px",
-            fontFamily: "Montserrat, sans-serif",
-          }}
-        >
-          {SIZE_OPTIONS.map((size, index) => (
-            <option key={index} value={index}>
-              {size.label} ({size.width}×{size.height})
-            </option>
-          ))}
-        </select>
-
-        <button
-          onClick={exportAsPng}
-          disabled={isExporting}
-          style={{
-            padding: "12px 24px",
-            background: "#5EB229",
-            color: "white",
-            border: "none",
-            borderRadius: "8px",
-            cursor: isExporting ? "wait" : "pointer",
-            fontWeight: 800,
-            fontSize: "16px",
-            fontFamily: "Montserrat, sans-serif",
-            opacity: isExporting ? 0.7 : 1,
-          }}
-        >
-          {isExporting ? "Exporting..." : "Export as PNG"}
-        </button>
-
-        <button
-          onClick={exportAsSvg}
-          disabled={isExporting}
-          style={{
-            padding: "12px 24px",
-            background: "#F2C94C",
-            color: "#154B54",
-            border: "none",
-            borderRadius: "8px",
-            cursor: isExporting ? "wait" : "pointer",
-            fontWeight: 900,
-            fontSize: "16px",
-            fontFamily: "Montserrat, sans-serif",
-            opacity: isExporting ? 0.7 : 1,
-          }}
-        >
-          Export as SVG
-        </button>
-
-        <button
-          onClick={exportAsHtml}
-          style={{
-            padding: "12px 24px",
-            background: "#016938",
-            color: "white",
-            border: "none",
-            borderRadius: "8px",
-            cursor: "pointer",
-            fontWeight: 900,
-            fontSize: "16px",
-            fontFamily: "Montserrat, sans-serif",
-          }}
-        >
-          Export as HTML
-        </button>
-      </div>
-
-      {/* Size Info */}
-      <div
-        style={{
-          textAlign: "center",
-          marginBottom: "20px",
-          color: "#888",
-          fontFamily: "Montserrat, sans-serif",
-        }}
-      >
-        Current size:{" "}
-        <span style={{ color: "#F2C94C", fontWeight: 700 }}>
-          {selectedSize.width} × {selectedSize.height}
-        </span>{" "}
-        px
-      </div>
-
-      {/* Design Preview */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          transform: `scale(${previewScale})`,
-          transformOrigin: "top center",
-        }}
-      >
-        <div
-          ref={designRef}
-          style={{
-            boxShadow: "0 20px 60px rgba(0,0,0,0.5)",
-            borderRadius: "10px",
-            overflow: "hidden",
-          }}
-        >
-          <OnlineCourseLunch
-            width={selectedSize.width}
-            height={selectedSize.height}
-          />
+    <div className="app-shell">
+      <header className="app-header">
+        <div className="title-block">
+          <div className="title-eyebrow">Print Ready</div>
+          <h1 className="title-main">Certificate Studio</h1>
         </div>
-      </div>
-
-      {/* Footer */}
-      <div
-        style={{
-          textAlign: "center",
-          marginTop: `${Math.max(40, selectedSize.height * previewScale + 40)}px`,
-          paddingTop: "20px",
-          borderTop: "1px solid #333",
-          color: "#666",
-          fontSize: "12px",
-          fontFamily: "Montserrat, sans-serif",
-        }}
-      >
-        <p>
-          Brand Colors: Dark Green #164a34 • Forest Green #0f3323 • Teal #2d7a54 • Mustard #E8A63E • Orange #E87C3E • Cream #FFF8E7
+        <p className="title-sub">
+          Build, preview, and export certificates in A4 and US Letter sizes.
         </p>
+      </header>
+
+      <div className="workspace">
+        <section className="panel controls">
+          <div className="panel-title">Design Controls</div>
+
+          <div className="control-group">
+            <label className="control-label" htmlFor="template-select">
+              Template
+            </label>
+            <select
+              id="template-select"
+              className="control-select"
+              value={templateId}
+              onChange={(event) => setTemplateId(event.target.value)}
+            >
+              {CERTIFICATE_TEMPLATES.map((template) => (
+                <option key={template.id} value={template.id}>
+                  {template.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="control-group">
+            <label className="control-label" htmlFor="size-select">
+              Certificate Size
+            </label>
+            <select
+              id="size-select"
+              className="control-select"
+              value={sizeId}
+              onChange={(event) => setSizeId(event.target.value)}
+            >
+              {CERTIFICATE_SIZES.map((size) => (
+                <option key={size.id} value={size.id}>
+                  {formatSizeLabel(size)}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="size-summary">
+            <div className="size-value">
+              {selectedSize.width} x {selectedSize.height} px
+            </div>
+            <div className="size-note">Optimized for 300 dpi printing.</div>
+          </div>
+
+          <div className="control-group">
+            <div className="control-label">Export</div>
+            <div className="button-row">
+              <button
+                type="button"
+                className="button button-primary"
+                onClick={exportAsPng}
+                disabled={isExporting}
+              >
+                {isExporting ? "Exporting..." : "Export PNG"}
+              </button>
+              <button
+                type="button"
+                className="button button-secondary"
+                onClick={exportAsSvg}
+                disabled={isExporting}
+              >
+                Export SVG
+              </button>
+              <button
+                type="button"
+                className="button button-ghost"
+                onClick={exportAsHtml}
+                disabled={isExporting}
+              >
+                Export HTML
+              </button>
+            </div>
+          </div>
+
+          <div className="helper-card">
+            <div className="helper-title">Output Tips</div>
+            <div className="helper-text">
+              PNG is best for print-ready delivery. SVG is ideal for editing.
+              HTML is useful for sharing the layout with developers.
+            </div>
+          </div>
+        </section>
+
+        <section className="panel preview">
+          <div className="panel-title">Preview</div>
+          <div className="preview-stage">
+            <div
+              className="preview-scale"
+              style={{ transform: `scale(${previewScale})` }}
+            >
+              <div className="preview-frame">
+                <div ref={designRef} className="design-surface">
+                  <TemplateComponent
+                    width={selectedSize.width}
+                    height={selectedSize.height}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="preview-caption">
+            Template: {selectedTemplate.name}
+          </div>
+        </section>
       </div>
     </div>
   );
