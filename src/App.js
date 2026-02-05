@@ -3,7 +3,7 @@ import { toPng, toSvg } from "html-to-image";
 import { saveAs } from "file-saver";
 import MentJudgeCert from "./MentJudgeCert";
 import SaParticipationCert from "./SaParticipationCert";
-import StackronAcademyCert from "./StackronAcademyCert";
+import StackronAcademyCert from "./StackronAcademyCertBADS";
 import "./App.css";
 
 const CERTIFICATE_TEMPLATES = [
