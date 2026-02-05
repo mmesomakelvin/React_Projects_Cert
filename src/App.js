@@ -14,7 +14,7 @@ const CERTIFICATE_TEMPLATES = [
   },
   {
     id: "stackron-academy",
-    name: "Stackron Academy BA/DS Certificate",
+    name: "BA/DS Stackron Academy Certificate",
     component: StackronAcademyCert,
   },
   {
