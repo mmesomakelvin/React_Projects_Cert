@@ -3,6 +3,7 @@ import { toPng, toSvg } from "html-to-image";
 import { saveAs } from "file-saver";
 import MentJudgeCert from "./MentJudgeCert";
 import SaParticipationCert from "./SaParticipationCert";
+import StackronAcademyCert from "./StackronAcademyCert";
 import "./App.css";
 
 const CERTIFICATE_TEMPLATES = [
@@ -10,6 +11,11 @@ const CERTIFICATE_TEMPLATES = [
     id: "mentor-judge",
     name: "Mentor and Judge Appreciation",
     component: MentJudgeCert,
+  },
+  {
+    id: "stackron-academy",
+    name: "Stackron Academy Completion",
+    component: StackronAcademyCert,
   },
   {
     id: "participation",
