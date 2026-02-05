@@ -15,19 +15,21 @@ export default function StackronAcademyCertBADS({
   const scale = Math.min(width / baseWidth, height / baseHeight);
 
   const brand = {
-    teal: "#0a6e6d",
-    tealDeep: "#0f4f4d",
-    tealLight: "#18a7a5",
+    teal: "#18a7a5",
+    tealDeep: "#0a6e6d",
+    tealDark: "#0f4f4d",
     ink: "#1b2b2c",
-    muted: "#6b7474",
-    background: "#f3f4ef",
+    muted: "#5f6f70",
+    background: "#f2f6f3",
     card: "#fbfaf6",
-    borderOuter: "#c9d4c5",
-    borderInner: "#d8e0d4",
-    panelTop: "#f6f7f3",
-    panelMid: "#ecefe4",
-    panelBottom: "#e4e8da",
+    borderOuter: "#cfe5df",
+    borderInner: "#dbece7",
+    panelTop: "#f3f7f5",
+    panelMid: "#ecf2ef",
+    panelBottom: "#e2ece7",
     gold: "#d8b568",
+    borderPattern: "#d6f0eb",
+    borderLine: "#bfe2da",
   };
 
   const fontSize = {
@@ -100,8 +102,8 @@ export default function StackronAcademyCertBADS({
                 90deg,
                 transparent,
                 transparent ${6 * scale}px,
-                rgba(201, 212, 197, 0.2) ${6 * scale}px,
-                rgba(201, 212, 197, 0.2) ${7 * scale}px
+                rgba(214, 240, 235, 0.35) ${6 * scale}px,
+                rgba(214, 240, 235, 0.35) ${7 * scale}px
               )
             `,
           }}
@@ -162,7 +164,7 @@ export default function StackronAcademyCertBADS({
               right: `${20 * scale}px`,
               width: `${rightPanelWidth}px`,
               background: `linear-gradient(180deg, ${brand.panelTop} 0%, ${brand.panelMid} 45%, ${brand.panelBottom} 100%)`,
-              borderLeft: `${1 * scale}px solid #d0d7ce`,
+              borderLeft: `${1 * scale}px solid ${brand.borderInner}`,
               boxShadow: `-${3 * scale}px 0 ${8 * scale}px rgba(0,0,0,0.08)`,
               display: "flex",
               flexDirection: "column",
@@ -247,7 +249,7 @@ export default function StackronAcademyCertBADS({
                   height: `${72 * scale}px`,
                   borderRadius: "50%",
                   background:
-                    "radial-gradient(circle at 30% 20%, #3f6f6d 0%, #305a58 55%, #274a48 100%)",
+                    "radial-gradient(circle at 30% 20%, #2f7a78 0%, #1c5f5d 55%, #144948 100%)",
                   boxShadow: `0 ${10 * scale}px ${22 * scale}px rgba(0,0,0,0.25)`,
                   display: "flex",
                   alignItems: "center",
@@ -271,7 +273,7 @@ export default function StackronAcademyCertBADS({
                       width: `${46 * scale}px`,
                       height: `${46 * scale}px`,
                       borderRadius: "50%",
-                      background: "linear-gradient(145deg, #3f6f6d 0%, #2e5553 100%)",
+                      background: "linear-gradient(145deg, #2f7a78 0%, #1c5f5d 100%)",
                       display: "flex",
                       flexDirection: "column",
                       alignItems: "center",
@@ -368,36 +370,11 @@ export default function StackronAcademyCertBADS({
                 src="/stackron-logo.png"
                 alt="Stackron Academy logo"
                 style={{
-                  width: `${46 * scale}px`,
+                  width: `${110 * scale}px`,
                   height: "auto",
                   display: "block",
                 }}
               />
-              <div>
-                <span
-                  style={{
-                    fontSize: `${fontSize.logoText}px`,
-                    fontWeight: 700,
-                    color: brand.tealDeep,
-                    display: "block",
-                    lineHeight: 1.1,
-                    letterSpacing: `${1 * scale}px`,
-                  }}
-                >
-                  Stackron
-                </span>
-                <span
-                  style={{
-                    fontSize: `${fontSize.logoSub}px`,
-                    fontWeight: 600,
-                    color: brand.tealLight,
-                    letterSpacing: `${2 * scale}px`,
-                    textTransform: "uppercase",
-                  }}
-                >
-                  Academy
-                </span>
-              </div>
             </div>
 
             {/* Date */}
