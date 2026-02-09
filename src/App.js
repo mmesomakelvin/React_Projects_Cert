@@ -4,6 +4,7 @@ import { saveAs } from "file-saver";
 import MentJudgeCert from "./MentJudgeCert";
 import SaParticipationCert from "./SaParticipationCert";
 import StackronAcademyCert from "./StackronAcademyCertBADS";
+import StackronAcademyCertAlt from "./StackronAcademyCertAlt";
 import "./App.css";
 
 const CERTIFICATE_TEMPLATES = [
@@ -16,6 +17,11 @@ const CERTIFICATE_TEMPLATES = [
     id: "stackron-academy",
     name: "BA/DS Stackron Academy Certificate",
     component: StackronAcademyCert,
+  },
+  {
+    id: "stackron-academy-alt",
+    name: "BA/DS Stackron Academy Certificate (Angled)",
+    component: StackronAcademyCertAlt,
   },
   {
     id: "participation",
