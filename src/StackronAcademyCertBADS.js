@@ -8,7 +8,7 @@ export default function StackronAcademyCertBADS({
   duration = "July 2025 - January 2026",
   programName = "Data Science and Business Analytics Training",
   signatureName = "Academy Director",
-  signatureTitle = "Program Director and CEO",
+  signatureTitle = "CEO",
 }) {
   const baseWidth = 768;
   const baseHeight = 515;
