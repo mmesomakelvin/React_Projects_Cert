@@ -432,7 +432,7 @@ export default function StackronAcademyCertBADS({
                 fontStyle: "italic",
               }}
             >
-              has successfully completed
+              Has successfully completed the program below.
             </p>
 
             {/* Program Name */}
@@ -460,8 +460,7 @@ export default function StackronAcademyCertBADS({
                 maxWidth: `${440 * scale}px`,
               }}
             >
-              Completed during the training period of {duration} with demonstrated mastery of data science
-              fundamentals and business analytics applications.
+              Awarded for having satisfied all the requirements of the program.
             </p>
 
             {/* Spacer */}

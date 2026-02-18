@@ -172,31 +172,6 @@ export default function StackronAcademyCertAlt({
                   }}
                 />
               </div>
-              <div
-                style={{
-                  marginTop: `${12 * scale}px`,
-                  fontSize: `${fontSize.sideTitle}px`,
-                  fontWeight: 700,
-                  letterSpacing: `${1.2 * scale}px`,
-                  textTransform: "uppercase",
-                  lineHeight: 1.2,
-                  maxWidth: `${132 * scale}px`,
-                }}
-              >
-                Stackron Academy
-              </div>
-              <div
-                style={{
-                  marginTop: `${5 * scale}px`,
-                  fontSize: `${fontSize.verify}px`,
-                  fontWeight: 600,
-                  lineHeight: 1.2,
-                  color: "rgba(255,255,255,0.96)",
-                  wordBreak: "break-word",
-                }}
-              >
-                academy.stackron.com
-              </div>
             </div>
 
             <div
@@ -432,8 +407,7 @@ export default function StackronAcademyCertAlt({
                 maxWidth: `${470 * scale}px`,
               }}
             >
-              has successfully completed the program below with practical
-              application in real-world business analytics scenarios.
+              Has successfully completed the program below.
             </div>
 
             <div
@@ -467,9 +441,7 @@ export default function StackronAcademyCertAlt({
                 maxWidth: `${490 * scale}px`,
               }}
             >
-              Awarded in recognition of consistent performance, analytical
-              rigor, and successful completion of all required capstone
-              milestones during the training cycle.
+              Awarded for having satisfied all the requirements of the program.
             </div>
 
             <div style={{ flex: 1 }} />
