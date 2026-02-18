@@ -6,8 +6,8 @@ export default function StackronAcademyCertAlt({
   verifyUrl = "{{VERIFY_URL}}",
   issueDate = "January 31, 2026",
   duration = "July 2025 - January 2026",
-  programName = "Data Science and Business Analytics Training",
-  signatureName = "Academy Director",
+  programName = "Data Science and Business Analytics",
+  signatureName = "Hamzah",
   signatureTitle = "CEO",
 }) {
   const baseWidth = 768;
@@ -151,15 +151,27 @@ export default function StackronAcademyCertAlt({
             />
 
             <div style={{ position: "relative", zIndex: 1 }}>
-              <img
-                src="/stackron-logo.png"
-                alt="Stackron Academy logo"
+              <div
                 style={{
-                  width: `${112 * scale}px`,
-                  height: "auto",
-                  display: "block",
+                  width: `${122 * scale}px`,
+                  padding: `${7 * scale}px ${8 * scale}px`,
+                  borderRadius: `${8 * scale}px`,
+                  background: "rgba(255,255,255,0.96)",
+                  border: `${1 * scale}px solid rgba(11,111,110,0.18)`,
+                  boxShadow: `0 ${3 * scale}px ${12 * scale}px rgba(0,0,0,0.2)`,
                 }}
-              />
+              >
+                <img
+                  src="/stackron-logo.png"
+                  alt="Stackron Academy logo"
+                  style={{
+                    width: `${106 * scale}px`,
+                    height: "auto",
+                    display: "block",
+                    margin: "0 auto",
+                  }}
+                />
+              </div>
               <div
                 style={{
                   marginTop: `${12 * scale}px`,
@@ -172,6 +184,18 @@ export default function StackronAcademyCertAlt({
                 }}
               >
                 Stackron Academy
+              </div>
+              <div
+                style={{
+                  marginTop: `${5 * scale}px`,
+                  fontSize: `${fontSize.verify}px`,
+                  fontWeight: 600,
+                  lineHeight: 1.2,
+                  color: "rgba(255,255,255,0.96)",
+                  wordBreak: "break-word",
+                }}
+              >
+                academy.stackron.com
               </div>
             </div>
 
@@ -518,6 +542,16 @@ export default function StackronAcademyCertAlt({
                   }}
                 >
                   Stackron Academy
+                </div>
+                <div
+                  style={{
+                    fontSize: `${fontSize.verify}px`,
+                    color: brand.muted,
+                    fontWeight: 600,
+                    marginBottom: `${6 * scale}px`,
+                  }}
+                >
+                  academy.stackron.com
                 </div>
                 <div
                   style={{

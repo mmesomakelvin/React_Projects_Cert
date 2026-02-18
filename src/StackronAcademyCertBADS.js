@@ -6,8 +6,8 @@ export default function StackronAcademyCertBADS({
   verifyUrl = "{{VERIFY_URL}}",
   issueDate = "January 31, 2026",
   duration = "July 2025 - January 2026",
-  programName = "Data Science and Business Analytics Training",
-  signatureName = "Academy Director",
+  programName = "Data Science and Business Analytics",
+  signatureName = "Hamzah",
   signatureTitle = "CEO",
 }) {
   const baseWidth = 768;
