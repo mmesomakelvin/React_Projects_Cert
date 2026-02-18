@@ -407,7 +407,7 @@ export default function StackronAcademyCertAlt({
                 maxWidth: `${470 * scale}px`,
               }}
             >
-              Has successfully completed the program below.
+              Has successfully completed the programme below
             </div>
 
             <div
@@ -441,7 +441,7 @@ export default function StackronAcademyCertAlt({
                 maxWidth: `${490 * scale}px`,
               }}
             >
-              Awarded for having satisfied all the requirements of the program.
+              Awarded for having satisfied all the requirements of the programme.
             </div>
 
             <div style={{ flex: 1 }} />

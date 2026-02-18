@@ -432,7 +432,7 @@ export default function StackronAcademyCertBADS({
                 fontStyle: "italic",
               }}
             >
-              Has successfully completed the program below.
+              Has successfully completed the programme below
             </p>
 
             {/* Program Name */}
@@ -460,7 +460,7 @@ export default function StackronAcademyCertBADS({
                 maxWidth: `${440 * scale}px`,
               }}
             >
-              Awarded for having satisfied all the requirements of the program.
+              Awarded for having satisfied all the requirements of the programme.
             </p>
 
             {/* Spacer */}
