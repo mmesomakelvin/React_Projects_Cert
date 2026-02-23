@@ -456,6 +456,18 @@ export default function StackronAcademyCertAlt({
               }}
             >
               <div style={{ minWidth: `${220 * scale}px` }}>
+                <img
+                  src="/signature_stackron.png"
+                  alt="Stackron signature"
+                  style={{
+                    display: "block",
+                    width: `${124 * scale}px`,
+                    height: `${36 * scale}px`,
+                    objectFit: "contain",
+                    objectPosition: "left center",
+                    marginBottom: `${6 * scale}px`,
+                  }}
+                />
                 <div
                   style={{
                     fontSize: `${fontSize.signatureTitle}px`,

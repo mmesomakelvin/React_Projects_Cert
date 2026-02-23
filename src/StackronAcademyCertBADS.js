@@ -477,6 +477,18 @@ export default function StackronAcademyCertBADS({
             >
               {/* Signature */}
               <div>
+                <img
+                  src="/signature_stackron.png"
+                  alt="Stackron signature"
+                  style={{
+                    display: "block",
+                    width: `${112 * scale}px`,
+                    height: `${34 * scale}px`,
+                    objectFit: "contain",
+                    objectPosition: "left center",
+                    marginBottom: `${6 * scale}px`,
+                  }}
+                />
                 <p
                   style={{
                     fontSize: `${fontSize.signatoryTitle}px`,

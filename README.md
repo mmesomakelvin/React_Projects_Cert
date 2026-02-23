@@ -8,6 +8,7 @@ Certificate Studio is a React-based design/export tool for generating print-read
 - Added BA/DS Cohort 1 quick preview + batch PNG export inside the app.
 - Added cohort issuance folders and recipient/link tracking files under `issuance/`.
 - Cohort 1 certificate IDs now use the correct DSBA prefix (for example `DSBA-C1-001`).
+- Added Stackron signature image support for BA/DS templates (`public/signature_stackron.png`).
 
 ## Current Templates
 
@@ -29,6 +30,7 @@ Certificate Studio is a React-based design/export tool for generating print-read
 ## Stackron Notes
 
 - Stackron templates use `public/stackron-logo.png`.
+- BA/DS Stackron templates now also use `public/signature_stackron.png` for the signatory signature image.
 - Dynamic fields used in Stackron templates:
   - `fullName`
   - `certId`
