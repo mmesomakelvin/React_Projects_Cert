@@ -5,7 +5,7 @@ export default function StackronAcademyCertAlt({
   certId = "{{CERT_ID}}",
   verifyUrl = "{{VERIFY_URL}}",
   issueDate = "January 31, 2026",
-  duration = "July 2025 - January 2026",
+  duration = "August 2025 - Jan, 2026",
   programName = "Data Science and Business Analytics",
   signatureName = "Hamzah",
   signatureTitle = "Chief Executive Officer",

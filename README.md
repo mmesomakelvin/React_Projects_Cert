@@ -7,6 +7,7 @@ Certificate Studio is a React-based design/export tool for generating print-read
 - BA/DS templates now use a title-only signatory block (`Chief Executive Officer`) without signature line/name.
 - Added BA/DS Cohort 1 quick preview + batch PNG export inside the app.
 - Added cohort issuance folders and recipient/link tracking files under `issuance/`.
+- Cohort 1 certificate IDs now use the correct DSBA prefix (for example `DSBA-C1-001`).
 
 ## Current Templates
 
@@ -50,6 +51,11 @@ the left panel shows a `BA/DS Cohort 1 Quick Download` section that lets you:
 - Preview a specific Cohort 1 recipient
 - See assigned certificate ID and Bitly placeholder link
 - Export both Cohort 1 certificates as PNG in one click (`Export Cohort 1 PNGs`)
+
+Current Cohort 1 defaults:
+
+- Certificate ID prefix: `DSBA`
+- Programme duration: `August 2025 - Jan, 2026`
 
 Note:
 
