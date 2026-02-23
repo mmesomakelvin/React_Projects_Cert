@@ -8,7 +8,7 @@ export default function StackronAcademyCertAlt({
   duration = "July 2025 - January 2026",
   programName = "Data Science and Business Analytics",
   signatureName = "Hamzah",
-  signatureTitle = "CEO",
+  signatureTitle = "Chief Executive Officer",
 }) {
   const baseWidth = 768;
   const baseHeight = 515;
@@ -458,28 +458,9 @@ export default function StackronAcademyCertAlt({
               <div style={{ minWidth: `${220 * scale}px` }}>
                 <div
                   style={{
-                    width: `${144 * scale}px`,
-                    height: `${1 * scale}px`,
-                    background: brand.accentDeep,
-                    marginBottom: `${7 * scale}px`,
-                  }}
-                />
-                <div
-                  style={{
-                    fontSize: `${fontSize.signatureName}px`,
-                    color: brand.ink,
-                    fontWeight: 700,
-                    marginBottom: `${2 * scale}px`,
-                  }}
-                >
-                  {signatureName}
-                </div>
-                <div
-                  style={{
                     fontSize: `${fontSize.signatureTitle}px`,
                     color: brand.accentDeep,
                     letterSpacing: `${0.3 * scale}px`,
-                    textTransform: "uppercase",
                     fontWeight: 700,
                   }}
                 >

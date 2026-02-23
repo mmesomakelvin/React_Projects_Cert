@@ -5,6 +5,7 @@ import MentJudgeCert from "./MentJudgeCert";
 import SaParticipationCert from "./SaParticipationCert";
 import StackronAcademyCert from "./StackronAcademyCertBADS";
 import StackronAcademyCertAlt from "./StackronAcademyCertAlt";
+import { BA_DS_COHORT_1_RECIPIENTS } from "./data/baDsCohort1Recipients";
 import "./App.css";
 
 const CERTIFICATE_TEMPLATES = [
@@ -50,11 +51,37 @@ const CERTIFICATE_SIZES = [
 const formatSizeLabel = (size) =>
   `${size.name} (${size.width} x ${size.height})`;
 
+const BA_DS_TEMPLATE_IDS = new Set(["stackron-academy", "stackron-academy-alt"]);
+
+const slugify = (value) =>
+  String(value || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "") || "recipient";
+
+const waitForNextPaint = () =>
+  new Promise((resolve) => {
+    if (
+      typeof window === "undefined" ||
+      typeof window.requestAnimationFrame !== "function"
+    ) {
+      setTimeout(resolve, 20);
+      return;
+    }
+
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(resolve);
+    });
+  });
+
 export default function App() {
   const designRef = useRef(null);
   const [templateId, setTemplateId] = useState(CERTIFICATE_TEMPLATES[0].id);
   const [sizeId, setSizeId] = useState(CERTIFICATE_SIZES[0].id);
   const [isExporting, setIsExporting] = useState(false);
+  const [baDsRecipientId, setBaDsRecipientId] = useState(
+    BA_DS_COHORT_1_RECIPIENTS[0]?.certId || ""
+  );
 
   const selectedTemplate =
     useMemo(
@@ -64,21 +91,59 @@ export default function App() {
   const selectedSize =
     useMemo(() => CERTIFICATE_SIZES.find((s) => s.id === sizeId), [sizeId]) ||
     CERTIFICATE_SIZES[0];
+  const selectedBaDsRecipient =
+    useMemo(
+      () =>
+        BA_DS_COHORT_1_RECIPIENTS.find((row) => row.certId === baDsRecipientId),
+      [baDsRecipientId]
+    ) || BA_DS_COHORT_1_RECIPIENTS[0] || null;
+  const isBaDsTemplate = BA_DS_TEMPLATE_IDS.has(templateId);
+  const previewRecipient = isBaDsTemplate ? selectedBaDsRecipient : null;
 
   const TemplateComponent = selectedTemplate.component;
-  const exportBaseName = `certificate-${selectedTemplate.id}-${selectedSize.id}-${selectedSize.width}x${selectedSize.height}`;
+  const templateDataProps = previewRecipient
+    ? {
+        fullName: previewRecipient.fullName,
+        certId: previewRecipient.certId,
+        verifyUrl: previewRecipient.verifyUrl,
+        issueDate: previewRecipient.issueDate,
+        duration: previewRecipient.duration,
+        programName: previewRecipient.programName,
+        signatureName: previewRecipient.signatureName,
+        signatureTitle: previewRecipient.signatureTitle,
+      }
+    : {};
+
+  const buildExportBaseName = (recipient = previewRecipient) => {
+    if (recipient && isBaDsTemplate) {
+      return `certificate-${selectedTemplate.id}-${selectedSize.id}-${recipient.certId}-${slugify(
+        recipient.fullName
+      )}`;
+    }
+
+    return `certificate-${selectedTemplate.id}-${selectedSize.id}-${selectedSize.width}x${selectedSize.height}`;
+  };
+
+  const renderPngDataUrl = async () =>
+    toPng(designRef.current, {
+      width: selectedSize.width,
+      height: selectedSize.height,
+      pixelRatio: 1,
+      cacheBust: true,
+    });
+
+  const renderSvgDataUrl = async () =>
+    toSvg(designRef.current, {
+      width: selectedSize.width,
+      height: selectedSize.height,
+    });
 
   const exportAsPng = async () => {
     if (!designRef.current) return;
     setIsExporting(true);
     try {
-      const dataUrl = await toPng(designRef.current, {
-        width: selectedSize.width,
-        height: selectedSize.height,
-        pixelRatio: 1,
-        cacheBust: true,
-      });
-      saveAs(dataUrl, `${exportBaseName}.png`);
+      const dataUrl = await renderPngDataUrl();
+      saveAs(dataUrl, `${buildExportBaseName()}.png`);
     } catch (error) {
       console.error("Export failed:", error);
     }
@@ -89,11 +154,8 @@ export default function App() {
     if (!designRef.current) return;
     setIsExporting(true);
     try {
-      const dataUrl = await toSvg(designRef.current, {
-        width: selectedSize.width,
-        height: selectedSize.height,
-      });
-      saveAs(dataUrl, `${exportBaseName}.svg`);
+      const dataUrl = await renderSvgDataUrl();
+      saveAs(dataUrl, `${buildExportBaseName()}.svg`);
     } catch (error) {
       console.error("Export failed:", error);
     }
@@ -108,7 +170,7 @@ export default function App() {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Certificate - ${selectedTemplate.name}</title>
+    <title>Certificate - ${selectedTemplate.name}${previewRecipient ? ` - ${previewRecipient.fullName}` : ""}</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <style>
       * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -127,7 +189,33 @@ export default function App() {
   </body>
 </html>`;
     const blob = new Blob([htmlContent], { type: "text/html" });
-    saveAs(blob, `${exportBaseName}.html`);
+    saveAs(blob, `${buildExportBaseName()}.html`);
+  };
+
+  const exportBaDsCohort1Pngs = async () => {
+    if (!designRef.current || !isBaDsTemplate) return;
+
+    const previousRecipientId = baDsRecipientId;
+    setIsExporting(true);
+
+    try {
+      for (const recipient of BA_DS_COHORT_1_RECIPIENTS) {
+        setBaDsRecipientId(recipient.certId);
+        await waitForNextPaint();
+
+        const dataUrl = await renderPngDataUrl();
+        saveAs(dataUrl, `${buildExportBaseName(recipient)}.png`);
+      }
+    } catch (error) {
+      console.error("Batch export failed:", error);
+    } finally {
+      if (previousRecipientId) {
+        setBaDsRecipientId(previousRecipientId);
+        await waitForNextPaint();
+      }
+
+      setIsExporting(false);
+    }
   };
 
   const maxPreviewWidth = 900;
@@ -197,6 +285,58 @@ export default function App() {
             <div className="size-note">Optimized for 300 dpi printing.</div>
           </div>
 
+          {isBaDsTemplate && previewRecipient ? (
+            <div className="helper-card cohort-card">
+              <div className="helper-title">BA/DS Cohort 1 Quick Download</div>
+
+              <div className="control-group">
+                <label className="control-label" htmlFor="bads-recipient-select">
+                  Recipient Preview
+                </label>
+                <select
+                  id="bads-recipient-select"
+                  className="control-select"
+                  value={baDsRecipientId}
+                  onChange={(event) => setBaDsRecipientId(event.target.value)}
+                  disabled={isExporting}
+                >
+                  {BA_DS_COHORT_1_RECIPIENTS.map((recipient) => (
+                    <option key={recipient.certId} value={recipient.certId}>
+                      {recipient.fullName}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="cohort-meta">
+                <div className="cohort-meta-line">
+                  <span className="cohort-meta-label">Cert ID</span>
+                  <span className="cohort-meta-value">{previewRecipient.certId}</span>
+                </div>
+                <div className="cohort-meta-line">
+                  <span className="cohort-meta-label">Bitly Link</span>
+                  <span className="cohort-meta-value">{previewRecipient.verifyUrl}</span>
+                </div>
+              </div>
+
+              <div className="button-row">
+                <button
+                  type="button"
+                  className="button button-secondary"
+                  onClick={exportBaDsCohort1Pngs}
+                  disabled={isExporting}
+                >
+                  {isExporting ? "Exporting..." : "Export Cohort 1 PNGs"}
+                </button>
+              </div>
+
+              <div className="helper-text">
+                Use the regular export buttons below for the selected recipient.
+                Batch export will download both Cohort 1 certificates as PNG files.
+              </div>
+            </div>
+          ) : null}
+
           <div className="control-group">
             <div className="control-label">Export</div>
             <div className="button-row">
@@ -248,6 +388,7 @@ export default function App() {
                   <TemplateComponent
                     width={selectedSize.width}
                     height={selectedSize.height}
+                    {...templateDataProps}
                   />
                 </div>
               </div>

@@ -8,7 +8,7 @@ export default function StackronAcademyCertBADS({
   duration = "July 2025 - January 2026",
   programName = "Data Science and Business Analytics",
   signatureName = "Hamzah",
-  signatureTitle = "CEO",
+  signatureTitle = "Chief Executive Officer",
 }) {
   const baseWidth = 768;
   const baseHeight = 515;
@@ -477,36 +477,6 @@ export default function StackronAcademyCertBADS({
             >
               {/* Signature */}
               <div>
-                <div
-                  style={{
-                    height: `${30 * scale}px`,
-                    marginBottom: `${4 * scale}px`,
-                    color: "#c7c7c7",
-                    fontSize: `${11 * scale}px`,
-                    fontStyle: "italic",
-                  }}
-                >
-                  [Signature]
-                </div>
-                <div
-                  style={{
-                    width: `${115 * scale}px`,
-                    height: `${1 * scale}px`,
-                    backgroundColor: brand.tealDeep,
-                    marginBottom: `${6 * scale}px`,
-                  }}
-                />
-                <p
-                  style={{
-                    fontSize: `${fontSize.signatoryName}px`,
-                    fontWeight: 600,
-                    color: brand.ink,
-                    margin: 0,
-                    marginBottom: `${2 * scale}px`,
-                  }}
-                >
-                  {signatureName}
-                </p>
                 <p
                   style={{
                     fontSize: `${fontSize.signatoryTitle}px`,
