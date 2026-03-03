@@ -19,8 +19,8 @@ Certificate Studio is a React-based design/export tool for generating print-read
 
 ## Export and Size Support
 
-- Export formats: PNG, SVG, HTML
-- BA/DS Cohort 1 batch export: PNG (in-app quick download for registered Cohort 1 recipients)
+- Export formats: PNG, PDF, SVG, HTML
+- BA/DS Cohort 1 batch export: PNG and PDF (in-app quick download for registered Cohort 1 recipients)
 - Supported sizes:
   - A4 Landscape (`3508 x 2480`)
   - US Letter Landscape (`3300 x 2550`)
@@ -53,6 +53,7 @@ the left panel shows a `BA/DS Cohort 1 Quick Download` section that lets you:
 - Preview a specific Cohort 1 recipient
 - See assigned certificate ID and Bitly placeholder link
 - Export both Cohort 1 certificates as PNG in one click (`Export Cohort 1 PNGs`)
+- Export both Cohort 1 certificates as a single multi-page PDF (`Export Cohort 1 PDF`)
 
 Current Cohort 1 defaults:
 
@@ -70,6 +71,7 @@ Note:
 - `issuance/ba-ds/cohort-1/recipients.csv`: cohort roster, cert IDs, verify URLs
 - `issuance/ba-ds/cohort-1/links/bitly-placeholders.csv`: Bitly placeholders to create manually
 - `issuance/ba-ds/cohort-1/exports/png`: target folder for exported PNG files
+- `issuance/ba-ds/cohort-1/exports/pdf`: target folder for exported PDF files
 - `issuance/ba-ds/cohort-1/exports/svg`: target folder for exported SVG files
 - `issuance/ba-ds/cohort-1/exports/html`: target folder for exported HTML files
 
@@ -94,7 +96,7 @@ Note:
    ```
 3. Open `http://localhost:3000`.
 4. Choose template and size, then export as needed.
-5. For BA/DS Cohort 1 batch export, select a BA/DS template and click `Export Cohort 1 PNGs`.
+5. For BA/DS Cohort 1 batch export, select a BA/DS template and click `Export Cohort 1 PNGs` or `Export Cohort 1 PDF`.
 
 ## Production Build
 

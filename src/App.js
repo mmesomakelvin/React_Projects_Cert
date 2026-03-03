@@ -1,6 +1,7 @@
 import React, { useMemo, useRef, useState } from "react";
 import { toPng, toSvg } from "html-to-image";
 import { saveAs } from "file-saver";
+import { jsPDF } from "jspdf";
 import MentJudgeCert from "./MentJudgeCert";
 import SaParticipationCert from "./SaParticipationCert";
 import StackronAcademyCert from "./StackronAcademyCertBADS";
@@ -74,6 +75,17 @@ const waitForNextPaint = () =>
     });
   });
 
+const getPdfPageConfig = (size) => {
+  const widthMm = (size.width * 25.4) / 300;
+  const heightMm = (size.height * 25.4) / 300;
+
+  return {
+    widthMm,
+    heightMm,
+    orientation: size.width >= size.height ? "l" : "p",
+  };
+};
+
 export default function App() {
   const designRef = useRef(null);
   const [templateId, setTemplateId] = useState(CERTIFICATE_TEMPLATES[0].id);
@@ -138,6 +150,28 @@ export default function App() {
       height: selectedSize.height,
     });
 
+  const exportDataUrlAsPdf = (dataUrl, filename) => {
+    const page = getPdfPageConfig(selectedSize);
+    const pdf = new jsPDF({
+      orientation: page.orientation,
+      unit: "mm",
+      format: [page.widthMm, page.heightMm],
+      compress: true,
+    });
+
+    pdf.addImage(
+      dataUrl,
+      "PNG",
+      0,
+      0,
+      page.widthMm,
+      page.heightMm,
+      undefined,
+      "FAST"
+    );
+    pdf.save(filename);
+  };
+
   const exportAsPng = async () => {
     if (!designRef.current) return;
     setIsExporting(true);
@@ -156,6 +190,18 @@ export default function App() {
     try {
       const dataUrl = await renderSvgDataUrl();
       saveAs(dataUrl, `${buildExportBaseName()}.svg`);
+    } catch (error) {
+      console.error("Export failed:", error);
+    }
+    setIsExporting(false);
+  };
+
+  const exportAsPdf = async () => {
+    if (!designRef.current) return;
+    setIsExporting(true);
+    try {
+      const dataUrl = await renderPngDataUrl();
+      exportDataUrlAsPdf(dataUrl, `${buildExportBaseName()}.pdf`);
     } catch (error) {
       console.error("Export failed:", error);
     }
@@ -208,6 +254,61 @@ export default function App() {
       }
     } catch (error) {
       console.error("Batch export failed:", error);
+    } finally {
+      if (previousRecipientId) {
+        setBaDsRecipientId(previousRecipientId);
+        await waitForNextPaint();
+      }
+
+      setIsExporting(false);
+    }
+  };
+
+  const exportBaDsCohort1Pdf = async () => {
+    if (!designRef.current || !isBaDsTemplate) return;
+
+    const previousRecipientId = baDsRecipientId;
+    const page = getPdfPageConfig(selectedSize);
+    const batchFileName = `certificates-${selectedTemplate.id}-${selectedSize.id}-cohort-1.pdf`;
+    let pdf = null;
+    setIsExporting(true);
+
+    try {
+      for (const [index, recipient] of BA_DS_COHORT_1_RECIPIENTS.entries()) {
+        setBaDsRecipientId(recipient.certId);
+        await waitForNextPaint();
+
+        const dataUrl = await renderPngDataUrl();
+        if (index === 0) {
+          pdf = new jsPDF({
+            orientation: page.orientation,
+            unit: "mm",
+            format: [page.widthMm, page.heightMm],
+            compress: true,
+          });
+        } else if (pdf) {
+          pdf.addPage([page.widthMm, page.heightMm], page.orientation);
+        }
+
+        if (pdf) {
+          pdf.addImage(
+            dataUrl,
+            "PNG",
+            0,
+            0,
+            page.widthMm,
+            page.heightMm,
+            undefined,
+            "FAST"
+          );
+        }
+      }
+
+      if (pdf) {
+        pdf.save(batchFileName);
+      }
+    } catch (error) {
+      console.error("Batch PDF export failed:", error);
     } finally {
       if (previousRecipientId) {
         setBaDsRecipientId(previousRecipientId);
@@ -328,11 +429,20 @@ export default function App() {
                 >
                   {isExporting ? "Exporting..." : "Export Cohort 1 PNGs"}
                 </button>
+                <button
+                  type="button"
+                  className="button button-ghost"
+                  onClick={exportBaDsCohort1Pdf}
+                  disabled={isExporting}
+                >
+                  {isExporting ? "Exporting..." : "Export Cohort 1 PDF"}
+                </button>
               </div>
 
               <div className="helper-text">
                 Use the regular export buttons below for the selected recipient.
-                Batch export will download both Cohort 1 certificates as PNG files.
+                Batch export can download both Cohort 1 certificates as PNG files
+                or as a single multi-page PDF.
               </div>
             </div>
           ) : null}
@@ -351,6 +461,14 @@ export default function App() {
               <button
                 type="button"
                 className="button button-secondary"
+                onClick={exportAsPdf}
+                disabled={isExporting}
+              >
+                Export PDF
+              </button>
+              <button
+                type="button"
+                className="button button-ghost"
                 onClick={exportAsSvg}
                 disabled={isExporting}
               >
@@ -370,8 +488,9 @@ export default function App() {
           <div className="helper-card">
             <div className="helper-title">Output Tips</div>
             <div className="helper-text">
-              PNG is best for print-ready delivery. SVG is ideal for editing.
-              HTML is useful for sharing the layout with developers.
+              PDF is best for easy share/print delivery. PNG is best for
+              high-resolution image output. SVG is ideal for editing, while HTML
+              is useful for sharing the layout with developers.
             </div>
           </div>
         </section>
